@@ -1,4 +1,4 @@
-package com.origami.rating.service;
+package com.origami.rating.utils;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -9,8 +9,8 @@ import java.util.Map;
 public final class Constants {
     
     //***************************************** File path Config **********************************************//
-    static String dir = System.getProperty("user.dir");
-    public static final String FILEPATH = dir + "\\rating\\src\\data\\States\\";
+    public static String dir = System.getProperty("user.dir");
+    public static final String FILEPATH = dir + "\\src\\data\\States\\";
     public static final String FILETYPE = ".xlsx";
 
     
@@ -19,24 +19,24 @@ public final class Constants {
 
 
     //********************** Job classification, job program, emp liability variables declaration *********************************//
-    static Map<String, String> classCodes = new LinkedHashMap<String, String>();
-    static Map<String, String> jobClassMapValues = new LinkedHashMap<String, String>();
-    static Map<String, String> jobProgramMapValues = new LinkedHashMap<String, String>();
-    static Map<String, String> empLiaLimits = new LinkedHashMap<String, String>();
+    public static Map<String, String> classCodes = new LinkedHashMap<String, String>();
+    public static Map<String, String> jobClassMapValues = new LinkedHashMap<String, String>();
+    public static Map<String, String> jobProgramMapValues = new LinkedHashMap<String, String>();
+    public static Map<String, String> empLiaLimits = new LinkedHashMap<String, String>();
 
 
     //********************** Job classification, job program, emp liability datatypes for excel outputs ****************************//
-    static String[] ASAjobClassExlColDatatypes = {"Text1","Text2","Number1","Number2","Number5","Number3","Text3","Text4","Number4"};
-    static String[] SLjobClassExlColDatatypes = {"Text1","Text2","Number1","Number2","Number3","Text3","Text4","Number4"};    
-    static String[] jobClassExlColDatatypes;    
-    static String[] jobProgExlColDatatypes = {"Text1","Text2","Text3","Text4"};
-    static String[] empLiaExlColDatatypes = {"Number1","Number2","Number3","Number4","Number5","Text1"};
+    public static String[] ASAjobClassExlColDatatypes = {"Text1","Text2","Number1","Number2","Number5","Number3","Text3","Text4","Number4"};
+    public static String[] SLjobClassExlColDatatypes = {"Text1","Text2","Number1","Number2","Number3","Text3","Text4","Number4"};    
+    public static String[] jobClassExlColDatatypes;    
+    public static String[] jobProgExlColDatatypes = {"Text1","Text2","Text3","Text4"};
+    public static String[] empLiaExlColDatatypes = {"Number1","Number2","Number3","Number4","Number5","Text1"};
 
     
     //******************************* For NCCI latest LCR rates ****************************************//
     public static final boolean useLatestRates =  false;                                // Change to true for latest rates from NCCI file
     public static final String FILE_NCCI_RATES=  "arlc070122.xlsx";                     // Provide NCCI file name (if using latest rates)
-    static Integer[] ncciColumnIndexes = new Integer[]{3,13};                           // Provide indexes for classcode & LCR columns (if using latest rates)
+    public static Integer[] ncciColumnIndexes = new Integer[]{3,13};                           // Provide indexes for classcode & LCR columns (if using latest rates)
     public static List<Integer> indexesForNCCIRates = Arrays.asList(ncciColumnIndexes);     
 
     

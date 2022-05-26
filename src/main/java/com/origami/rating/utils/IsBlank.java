@@ -1,5 +1,5 @@
-package com.origami.rating.service;
-import com.origami.rating.service.Constants;
+package com.origami.rating.utils;
+import com.origami.rating.utils.Constants;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
