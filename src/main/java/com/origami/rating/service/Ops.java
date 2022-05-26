@@ -69,7 +69,7 @@ public class Ops {
     public void getColumnIndexesFromExcelAndSet(List<Integer> headers){
         this.headers = headers;
     }
-
+    
     public void getFromExcelAndSet(){
         if(this.data != null) this.data.clear();
         int i = 0;
@@ -112,7 +112,8 @@ public class Ops {
     public Map<Integer, List<String>> getData() {
         return this.data;
     }
-
+  
+    
     public void filterWith(Map<Integer, List<String>> firstList){
         Map<Integer, List<String>> dList = filterData(firstList,this.data);
         this.data = dList;
@@ -148,7 +149,8 @@ public class Ops {
         Map<Integer, List<String>> dList = mapData(this.data, listToAppend);
         this.data = dList; 
     }
-
+   
+    // function to map the data in the Map
     public static Map<Integer, List<String>> mapData(Map<Integer, List<String>> dList1, Map<Integer, List<String>> dList2){    //All values from list1 will retain and first column from scnd list will remove
         Map<Integer, List<String>> mappedList = new LinkedHashMap<Integer, List<String>>();                                   
         int k =0;                                                                                                           
@@ -258,7 +260,7 @@ public class Ops {
             }
         }
         try {
-            FileOutputStream out = new FileOutputStream(new File("C:/Users/amankumar792/Documents/GitHub/rating/src/data/States/Output/"+ Constants.CURRENT_STATE + fileName + ".xlsx"));
+            FileOutputStream out = new FileOutputStream(new File("C:/Users/shalirathore/Documents/GitHub/rating/src/data/States/Output/"+ Constants.CURRENT_STATE + fileName + ".xlsx"));  // path to the output folder where excel will be generated
             workbook.write(out);
             System.out.println(fileName + " Excel Generated...");
             out.close();

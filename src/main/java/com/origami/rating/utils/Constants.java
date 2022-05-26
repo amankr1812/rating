@@ -8,14 +8,14 @@ import java.util.Map;
 
 public final class Constants {
     
-    //***************************************** File path Config **********************************************//
+    //***************************************** File path Configuration **********************************************//
     public static String dir = System.getProperty("user.dir");
     public static final String FILEPATH = dir + "\\src\\data\\States\\";
     public static final String FILETYPE = ".xlsx";
 
     
     //***************************************** State name ****************************************************//
-    public static final String CURRENT_STATE = "KS";
+    public static final String CURRENT_STATE = "CO";
 
 
     //********************** Job classification, job program, emp liability variables declaration *********************************//
@@ -41,7 +41,7 @@ public final class Constants {
 
     
     //******************************************* Configuration for excel operations ***********************************************//
-    public static final String FILE_PRODUCT_DEFINITION=  "WC Product Definition - KS NCCI.xlsx";   // Product definition filename 
+    public static final String FILE_PRODUCT_DEFINITION=  "WC Product Definition - CO NCCI.xlsx";   // Product definition filename 
     public static final int STATE_WCRATE_LC_SHEET_NO =  2;                              // Sheet number for wc rate or class codes
     public static final int ROW_READ_INDEX_FOR_WC_SHEET = 0;                            // Row number to start reading from for class codes (eg: If row number is 1, enter value as 0)
     public static final int STATE_CLASS_VAR_SHEET_NO =  4;                              // Sheet number for class variables

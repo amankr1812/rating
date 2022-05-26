@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
+@RestController              
 @RequestMapping("/origami")
 public class Controller {
 	
@@ -29,11 +29,11 @@ public class Controller {
 		
 	}
 	
-	@GetMapping("/test2")
+	@GetMapping("/test2") // Test function to generate the consolidated excel
     public static void perform(){
         try {
         	
-            Constants.initialize(Constants.isClientSL,Constants.useLatestRates);
+            Constants.initialize(Constants.isClientSL,Constants.useLatestRates);      // Function call to put the value in respective Map
             Map<Integer, List<String>> list2Print;
             Ops instance;
             Ops newRates;            
@@ -88,6 +88,5 @@ public class Controller {
             System.out.println("Exception in controller");
             e.printStackTrace();
         }
-    }
-	
+	}
 }

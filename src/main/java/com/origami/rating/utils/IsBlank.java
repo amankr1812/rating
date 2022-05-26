@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 
-
+// function to check weather the given value is Null or not
 public class IsBlank {
 
     static DataFormatter formatter = new DataFormatter();
