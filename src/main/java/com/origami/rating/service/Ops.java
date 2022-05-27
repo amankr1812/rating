@@ -260,7 +260,7 @@ public class Ops {
             }
         }
         try {
-            FileOutputStream out = new FileOutputStream(new File("C:/Users/shalirathore/Documents/GitHub/rating/src/data/States/Output/"+ Constants.CURRENT_STATE + fileName + ".xlsx"));  // path to the output folder where excel will be generated
+            FileOutputStream out = new FileOutputStream(new File("C:/Users/amankumar792/Documents/GitHub/rating/src/data/States/Output/"+ Constants.CURRENT_STATE + fileName + ".xlsx"));  // path to the output folder where excel will be generated
             workbook.write(out);
             System.out.println(fileName + " Excel Generated...");
             out.close();
@@ -293,7 +293,7 @@ public class Ops {
             }
         }
         try {
-            FileOutputStream out = new FileOutputStream(new File("C:/Users/hagola/Documents/Origami/rating/src/data/States/Output/"+ fileName + ".xlsx"));
+            FileOutputStream out = new FileOutputStream(new File("C:/Users/amankumar792/Documents/Origami/rating/src/data/States/Output/"+ fileName + ".xlsx"));
             workbook.write(out);
             System.out.println(fileName+ " Excel Generated...");
             out.close();

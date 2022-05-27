@@ -29,8 +29,8 @@ public class Controller {
 		
 	}
 	
-	@GetMapping("/test2") // Test function to generate the consolidated excel
-    public static void perform(){
+	@GetMapping("/excel") // Test function to generate the consolidated excel
+    public static String perform(){
         try {
         	
             Constants.initialize(Constants.isClientSL,Constants.useLatestRates);      // Function call to put the value in respective Map
@@ -84,9 +84,12 @@ public class Controller {
             Ops.writeToExcel(Constants.jobProgExlColDatatypes, Constants.jobProgramMapValues, list2Print, " -" + Constants.CARRIER + " " + Constants.JOB_PROGRAM_CODES);
             Ops.writeToExcel(Constants.empLiaExlColDatatypes , Constants.empLiaLimits, empSheet.getData(), " -" + Constants.CARRIER + " " + Constants.EMP_LIA_LIMITS);
             System.out.println();
+          
+            return "Excel Conversion completed. Output Files Created Successfully!";
         } catch (Exception e) {
             System.out.println("Exception in controller");
             e.printStackTrace();
+            return "Excel Conversion Issue!";
         }
 	}
 }
