@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.origami.rating.entity.Model;
 import com.origami.rating.interfaces.ASA_Test.JobRates;
 import com.origami.rating.utils.Headers;
 import com.origami.rating.utils.IsBlank;
@@ -26,6 +27,8 @@ import com.origami.rating.utils.Constants;
 
 
 public class Ops {
+	
+	public static Model model;
 
     String excelPath;
     XSSFWorkbook workbook;
@@ -260,7 +263,7 @@ public class Ops {
             }
         }
         try {
-            FileOutputStream out = new FileOutputStream(new File("C:/Users/amankumar792/Documents/GitHub/rating/src/data/States/Output/"+ Constants.CURRENT_STATE + fileName + ".xlsx"));  // path to the output folder where excel will be generated
+            FileOutputStream out = new FileOutputStream(new File("C:/Users/amankumar792/Documents/GitHub/rating/src/data/States/Output/"+ model.getCurrentState() + fileName + ".xlsx"));  // path to the output folder where excel will be generated
             workbook.write(out);
             System.out.println(fileName + " Excel Generated...");
             out.close();
@@ -312,8 +315,8 @@ public class Ops {
     }
 
     private static String preDefinedValues(String sKey){
-        if(sKey == "Rating Tier") return Constants.RATING_TIER;
-        if(sKey == "Loss Cost Multiplier") return Constants.LCM;
+        if(sKey == "Rating Tier") return model.getRatingTier();
+        if(sKey == "Loss Cost Multiplier") return model.getLcm();
         // if(sKey == "Per Claim") return Constants.PER_CLAIM;
         // if(sKey == "Per Occurrence") return Constants.PER_OCCURRENCE;
         return null;
