@@ -1,8 +1,12 @@
 package com.origami.rating.interfaces.ASA_Test;
+import com.origami.rating.entity.Model;
 import com.origami.rating.utils.Constants;
 
 
 public class JobRates {
+	
+	public static Model model;
+	
     private String jobClassification;
     private String classSuffix;
     private String LCR;
@@ -12,7 +16,7 @@ public class JobRates {
     private String diseaseLoad;
     private String contractingClass;
     private String RatingTier = "Standard";
-    private String LCM = Constants.LCM;
+    private String LCM = model.getLcm();
     private String hazardGroup;
     
     public String getProgram() {

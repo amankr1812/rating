@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.origami.rating.service.*;
 import com.origami.rating.payload.*;
 import com.origami.rating.controller.*;
+import com.origami.rating.entity.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/origami")
 public class Controller {
 	
+	public static Model model;
 	private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
     @Autowired
@@ -53,15 +56,15 @@ public class Controller {
     public static String perform(){
         try {
         	
-            Constants.initialize(Constants.isClientSL,Constants.useLatestRates);      // Function call to put the value in respective Map
+            Constants.initialize(model.getIsClientSL(),model.getUseLatestRates());      // Function call to put the value in respective Map
             Map<Integer, List<String>> list2Print;
             Ops instance;
             Ops newRates;            
-            Ops readJobClassWCSheet = new Ops(Constants.STATE_WCRATE_LC_SHEET_NO, "", Constants.ROW_READ_INDEX_FOR_WC_SHEET, Constants.FILEPATH + Constants.FILE_PRODUCT_DEFINITION);
-            Ops readJobProgWCSheet = new Ops(Constants.STATE_WCRATE_LC_SHEET_NO, "", Constants.ROW_READ_INDEX_FOR_WC_SHEET, Constants.FILEPATH + Constants.FILE_PRODUCT_DEFINITION);
-            Ops readJobClassVarSheet = new Ops(Constants.STATE_CLASS_VAR_SHEET_NO, "", Constants.ROW_READ_INDEX_FOR_CLASS_VAR_SHEET, Constants.FILEPATH + Constants.FILE_PRODUCT_DEFINITION);
-            Ops readJobProgVarSheet = new Ops(Constants.STATE_CLASS_VAR_SHEET_NO, "", Constants.ROW_READ_INDEX_FOR_CLASS_VAR_SHEET, Constants.FILEPATH + Constants.FILE_PRODUCT_DEFINITION);
-            Ops empSheet = new Ops(Constants.STATE_EMP_LIABILITY_SHEET_NO, "", Constants.ROW_READ_INDEX_FOR_EMP_LIABILITY, Constants.FILEPATH + Constants.FILE_PRODUCT_DEFINITION);
+            Ops readJobClassWCSheet = new Ops(model.getStateWcRateLcSheetNo(), "", model.getRowReadIndexForWcSheet(), Constants.FILEPATH + model.getFileProductDefinition());
+            Ops readJobProgWCSheet = new Ops(model.getStateWcRateLcSheetNo(), "", model.getRowReadIndexForWcSheet(), Constants.FILEPATH + model.getFileProductDefinition());
+            Ops readJobClassVarSheet = new Ops(model.getStateClassVarSheetNo(), "", model.getRowReadIndexForClassVarSheet(), Constants.FILEPATH + model.getFileProductDefinition());
+            Ops readJobProgVarSheet = new Ops(model.getStateClassVarSheetNo(), "", model.getRowReadIndexForClassVarSheet(), Constants.FILEPATH + model.getFileProductDefinition());
+            Ops empSheet = new Ops(model.getStateEmpLiabilitySheetNo(), "", model.getRowReadIndexForEmpLiability(), Constants.FILEPATH + model.getFileProductDefinition());
             readJobClassWCSheet.getColumnIndexesFromExcelAndSet(Constants.jobClassMapValues);
             readJobProgWCSheet.getColumnIndexesFromExcelAndSet(Constants.jobProgramMapValues);
             readJobClassVarSheet.getColumnIndexesFromExcelAndSet(Constants.jobClassMapValues);
@@ -79,18 +82,18 @@ public class Controller {
             Map<Integer, List<String>> mappedList = Ops.mapData(dataFromWcSheetForJobClass,dataFromWcSheetForJobProg);
             Map<Integer, List<String>> mappedList1 = Ops.mapData(dataFromClassVarForJobClass,dataFromClassVarForJobProg);
             Map<Integer, List<String>> mappedList2 = Ops.mapData(mappedList,mappedList1);
-            if(Constants.useLatestRates){
-                newRates = new Ops(0,"",0,Constants.FILEPATH+ Constants.FILE_NCCI_RATES);  
+            if(model.getUseLatestRates()){
+                newRates = new Ops(0,"",0,Constants.FILEPATH+ model.getFileNcciRates());  
                 newRates.useLatestRates();
                 newRates.getColumnIndexesFromExcelAndSet(Constants.indexesForNCCIRates);
                 newRates.getFromExcelAndSet();
                 mappedList2 = Ops.mapData(mappedList2,newRates.getData());
             }
-            if(Constants.isClientSL){
+            if(model.getIsClientSL()){
                 list2Print = mappedList2;
             } else { // For ASA
-                if(Constants.FILTER_WITH_CLASS_TABLE){
-                    instance = new Ops(Constants.STATE_QUICK_CHART_SHEET_NO, Constants.CURRENT_STATE, Constants.ROW_READ_INDEX_FOR_CLASS_CODES, Constants.FILEPATH + Constants.FILE_CLASS_TABLE);
+                if(model.getFilterWithClassTable()){
+                    instance = new Ops(model.getStateQuickChartSheetNo(), model.getCurrentState(), model.getRowReadIndexForClassCodes(), Constants.FILEPATH + model.getFileClassTable());
                     instance.getColumnIndexesFromExcelAndSet(Constants.classCodes);
                     instance.getFromExcelAndSet();
                     list2Print = Ops.filterData(instance.getData(),mappedList2);
@@ -99,10 +102,10 @@ public class Controller {
                 }
                 
             }            
-            if(Constants.useLatestRates) Ops.writeToExcel(Constants.jobClassExlColDatatypes, Constants.jobClassMapValues, list2Print, " -" + Constants.CARRIER + " " + Constants.JOB_CLASSIFICATION + " New Rates");
-            else Ops.writeToExcel(Constants.jobClassExlColDatatypes, Constants.jobClassMapValues, list2Print, " -" + Constants.CARRIER + " " + Constants.JOB_CLASSIFICATION);
-            Ops.writeToExcel(Constants.jobProgExlColDatatypes, Constants.jobProgramMapValues, list2Print, " -" + Constants.CARRIER + " " + Constants.JOB_PROGRAM_CODES);
-            Ops.writeToExcel(Constants.empLiaExlColDatatypes , Constants.empLiaLimits, empSheet.getData(), " -" + Constants.CARRIER + " " + Constants.EMP_LIA_LIMITS);
+            if(model.getUseLatestRates()) Ops.writeToExcel(Constants.jobClassExlColDatatypes, Constants.jobClassMapValues, list2Print, " -" + model.getCarrier() + " " + model.getJobClassification() + " New Rates");
+            else Ops.writeToExcel(Constants.jobClassExlColDatatypes, Constants.jobClassMapValues, list2Print, " -" + model.getCarrier() + " " + model.getJobClassification());
+            Ops.writeToExcel(Constants.jobProgExlColDatatypes, Constants.jobProgramMapValues, list2Print, " -" + model.getCarrier() + " " + model.getJobProgramCodes());
+            Ops.writeToExcel(Constants.empLiaExlColDatatypes , Constants.empLiaLimits, empSheet.getData(), " -" + model.getCarrier() + " " + model.getEmpLiaLimits());
             System.out.println();
           
             return "Excel Conversion completed. Output Files Created Successfully!";
