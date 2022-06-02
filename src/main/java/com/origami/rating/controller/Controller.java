@@ -1,4 +1,5 @@
 package com.origami.rating.controller;
+import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
 
 @RestController              
 @RequestMapping("/origami")
-public class Controller {
+public class Controller  {
 	
 	public static Model model;
 	private static final Logger logger = LoggerFactory.getLogger(Controller.class);
@@ -45,14 +46,10 @@ public class Controller {
     @Autowired
     private FileStorageService fileStorageService;
 
-	@GetMapping("/test") // Test function to return a string
-	public String Test() {
-		return "Hello World!";
-		
-		
-	}
+    @Autowired
+    public Constants c;
 	
-	@GetMapping("/excel") // Test function to generate the consolidated excel
+  /*	@GetMapping("/excel") // Test function to generate the consolidated excel
     public static String perform(){
         try {
         	
@@ -114,11 +111,131 @@ public class Controller {
             e.printStackTrace();
             return "Excel Conversion Issue!";
         }
+	} */
+	
+	public String commonFunction(Model model) {
+		
+		try {
+			//System.out.println(c.getFILEPATH());
+			Ops.initializeModel(model);
+			Constants.initialize(model.getIsClientSL(),model.getUseLatestRates());      // Function call to put the value in respective Map
+            Map<Integer, List<String>> list2Print;
+            Ops instance;
+            Ops newRates;            
+            Ops readJobClassWCSheet = new Ops(model.getStateWcRateLcSheetNo(), "", model.getRowReadIndexForWcSheet(), c.getFILEPATH() + model.getFileProductDefinition());
+            Ops readJobProgWCSheet = new Ops(model.getStateWcRateLcSheetNo(), "", model.getRowReadIndexForWcSheet(), c.getFILEPATH() + model.getFileProductDefinition());
+            Ops readJobClassVarSheet = new Ops(model.getStateClassVarSheetNo(), "", model.getRowReadIndexForClassVarSheet(), c.getFILEPATH() + model.getFileProductDefinition());
+            Ops readJobProgVarSheet = new Ops(model.getStateClassVarSheetNo(), "", model.getRowReadIndexForClassVarSheet(), c.getFILEPATH() + model.getFileProductDefinition());
+            Ops empSheet = new Ops(model.getStateEmpLiabilitySheetNo(), "", model.getRowReadIndexForEmpLiability(), c.getFILEPATH() + model.getFileProductDefinition());
+            readJobClassWCSheet.getColumnIndexesFromExcelAndSet(Constants.jobClassMapValues);
+            readJobProgWCSheet.getColumnIndexesFromExcelAndSet(Constants.jobProgramMapValues);
+            readJobClassVarSheet.getColumnIndexesFromExcelAndSet(Constants.jobClassMapValues);
+            readJobProgVarSheet.getColumnIndexesFromExcelAndSet(Constants.jobProgramMapValues);
+            empSheet.getColumnIndexesFromExcelAndSet(Constants.empLiaLimits);
+            readJobClassWCSheet.getFromExcelAndSet();
+            readJobProgWCSheet.getFromExcelAndSet();
+            readJobClassVarSheet.getFromExcelAndSet();
+            readJobProgVarSheet.getFromExcelAndSet();
+            empSheet.getFromExcelAndSet();
+            Map<Integer, List<String>> dataFromWcSheetForJobClass = readJobClassWCSheet.getData();
+            Map<Integer, List<String>> dataFromWcSheetForJobProg = readJobProgWCSheet.getData();
+            Map<Integer, List<String>> dataFromClassVarForJobClass = readJobClassVarSheet.getData();
+            Map<Integer, List<String>> dataFromClassVarForJobProg = readJobProgVarSheet.getData();
+            Map<Integer, List<String>> mappedList = Ops.mapData(dataFromWcSheetForJobClass,dataFromWcSheetForJobProg);
+            Map<Integer, List<String>> mappedList1 = Ops.mapData(dataFromClassVarForJobClass,dataFromClassVarForJobProg);
+            Map<Integer, List<String>> mappedList2 = Ops.mapData(mappedList,mappedList1);
+            if(model.getUseLatestRates()){
+                newRates = new Ops(0,"",0,c.getFILEPATH()+ model.getFileNcciRates());  
+                newRates.useLatestRates();
+                newRates.getColumnIndexesFromExcelAndSet(Constants.ncci(model));
+                newRates.getFromExcelAndSet();
+                mappedList2 = Ops.mapData(mappedList2,newRates.getData());
+            }
+            
+            if(model.getIsClientSL()){
+                list2Print =slPerform(mappedList2);
+            } else { // For ASA
+            	
+            	list2Print =asaPerform(mappedList2, model);
+            	
+               /* if(model.getFilterWithClassTable()){
+                    instance = new Ops(model.getStateQuickChartSheetNo(), model.getCurrentState(), model.getRowReadIndexForClassCodes(), Constants.FILEPATH + model.getFileClassTable());
+                    instance.getColumnIndexesFromExcelAndSet(Constants.classCodes);
+                    instance.getFromExcelAndSet();
+                    list2Print = Ops.filterData(instance.getData(),mappedList2);
+                } else {
+                    list2Print = mappedList2;
+                } */
+                
+            }
+            
+            if(model.getUseLatestRates()) 
+            	Ops.writeToExcel(Constants.jobClassExlColDatatypes, Constants.jobClassMapValues, list2Print, " -" + model.getCarrier() + " " + model.getJobClassification() + " New Rates");
+            else 
+            	Ops.writeToExcel(Constants.jobClassExlColDatatypes, Constants.jobClassMapValues, list2Print, " -" + model.getCarrier() + " " + model.getJobClassification());
+            
+            Ops.writeToExcel(Constants.jobProgExlColDatatypes, Constants.jobProgramMapValues, list2Print, " -" + model.getCarrier() + " " + model.getJobProgramCodes());
+            Ops.writeToExcel(Constants.empLiaExlColDatatypes , Constants.empLiaLimits, empSheet.getData(), " -" + model.getCarrier() + " " + model.getEmpLiaLimits());
+            System.out.println();
+          
+            return "Excel Conversion completed. Output Files Created Successfully!";
+			
+		}catch (Exception e) {
+            System.out.println("Exception in controller");
+            e.printStackTrace();
+            return "Excel Conversion Issue!";
+        }
 	}
 	
-
-
-    @PostMapping("/uploadFile")
+	@PostMapping("/sl")
+	public void serviceLoydd(@ModelAttribute Model model) {
+		String fileName3;
+		Model modelObj=new Model(model);
+		
+		// This line will store the file in the specified location(mentioned in the application.properties file)
+		System.out.println(model.getProductDefinition());
+		String fileName = fileStorageService.storeFile(model.getProductDefinition()); 		
+		if(model.getUseLatestRates())
+		fileName3 = fileStorageService.storeFile(model.getNcciFile()); 
+		commonFunction(modelObj);
+	}
+	
+	public Map<Integer, List<String>> slPerform(Map<Integer, List<String>> mappedList2) {
+        	Map<Integer, List<String>> list2Print;
+            list2Print = mappedList2;
+            return list2Print;
+		
+	}
+	
+	@PostMapping("/asa")
+	public void asa(@ModelAttribute Model model) {
+		Model modelObj=new Model(model);
+		String fileName3;
+		// This line will store the file in the specified location(mentioned in the application.properties file)
+		String fileName = fileStorageService.storeFile(model.getProductDefinition()); // common file
+		String fileName2 = fileStorageService.storeFile(model.getClassTable()); 
+		if(model.getUseLatestRates())
+		fileName3 = fileStorageService.storeFile(model.getNcciFile()); 
+		commonFunction(modelObj);
+	}
+	
+	public Map<Integer, List<String>> asaPerform(Map<Integer, List<String>> mappedList2, Model model) {
+		
+		Ops instance;
+		Map<Integer, List<String>> list2Print;
+        if(model.getFilterWithClassTable()){
+            instance = new Ops(model.getStateQuickChartSheetNo(), model.getCurrentState(), model.getRowReadIndexForClassCodes(), c.getFILEPATH() + model.getFileClassTable());
+            instance.getColumnIndexesFromExcelAndSet(Constants.classCodes);
+            instance.getFromExcelAndSet();
+            list2Print = Ops.filterData(instance.getData(),mappedList2);
+        } else {
+            list2Print = mappedList2;
+        }
+        return list2Print;
+	}
+	
+// ********************************************** Original Function Code ******************************
+	@PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
 
@@ -129,7 +246,8 @@ public class Controller {
 
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
-    }
+    } 
+    
 
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
@@ -137,7 +255,7 @@ public class Controller {
                 .stream()
                 .map(file -> uploadFile(file))
                 .collect(Collectors.toList());
-    }
+    } 
 
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {

@@ -15,7 +15,7 @@ function uploadSingleFile(file) {
     formData.append("file", file);
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/origami/uploadFile");
+    xhr.open("GET", "/origami/sl");
 
     xhr.onload = function() {
         console.log(xhr.responseText);

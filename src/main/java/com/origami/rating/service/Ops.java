@@ -23,13 +23,30 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.origami.rating.utils.Constants;
 
 
 public class Ops {
 	
-	public static Model model;
+	public static Model model1;
+	public static IsBlank isBlank1;
+	
+	@Value("${file.output-dir}")
+	 private static String outputFilePath;
+	
+   public static String getOutputFilePath() {
+		return outputFilePath;
+	}
 
+
+	public void setOutputFilePath(String outputFilePath) {
+		Ops.outputFilePath = outputFilePath;
+	} 
+	
     String excelPath;
     XSSFWorkbook workbook;
     XSSFSheet sheet;
@@ -47,6 +64,7 @@ public class Ops {
     public Ops(int sheetNo, String sheetName, int _RRI, String excelPath){
         this.excelPath = excelPath;
         try {
+        	System.out.println(this.excelPath);
             this.workbook = new XSSFWorkbook(this.excelPath);
         } catch (IOException e) {
             System.out.println("Exception while opening the workbook");
@@ -263,7 +281,9 @@ public class Ops {
             }
         }
         try {
-            FileOutputStream out = new FileOutputStream(new File("C:/Users/amankumar792/Documents/GitHub/rating/src/data/States/Output/"+ model.getCurrentState() + fileName + ".xlsx"));  // path to the output folder where excel will be generated
+        	
+        	//System.out.println("*************************************** "+Ops.getOutputFilePath());
+            FileOutputStream out = new FileOutputStream(new File("C:/Users/amankumar792/Documents/outputFolder/"+ model1.getCurrentState() + fileName + ".xlsx"));  // path to the output folder where excel will be generated
             workbook.write(out);
             System.out.println(fileName + " Excel Generated...");
             out.close();
@@ -315,8 +335,9 @@ public class Ops {
     }
 
     private static String preDefinedValues(String sKey){
-        if(sKey == "Rating Tier") return model.getRatingTier();
-        if(sKey == "Loss Cost Multiplier") return model.getLcm();
+    
+        if(sKey == "Rating Tier") return model1.getRatingTier();
+        if(sKey == "Loss Cost Multiplier") return model1.getLcm();
         // if(sKey == "Per Claim") return Constants.PER_CLAIM;
         // if(sKey == "Per Occurrence") return Constants.PER_OCCURRENCE;
         return null;
@@ -343,5 +364,11 @@ public class Ops {
         }
         modifiedString = modifiedString + val;
         return modifiedString;
+    }
+    
+    public static void initializeModel(Model model) {
+    	model1=model;
+    	isBlank1.initializeModel(model);
+    	//System.out.println(model);
     }
 }

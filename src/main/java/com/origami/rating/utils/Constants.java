@@ -4,19 +4,38 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
 import com.origami.rating.entity.*;
 
-
+@Component
 public final class Constants {
 	
 	public static Model model;
-    
+	
+
     //***************************************** File path Configuration **********************************************//
-    public static String dir = System.getProperty("user.dir");
-    public static final String FILEPATH = dir + "\\src\\data\\States\\";
+    //public static String dir = System.getProperty("user.dir");
+    //public static final String FILEPATH = dir + "\\src\\data\\States\\";
+	@Value("${file.upload-dir}")
+	 private String FILEPATH;
+	
+    public String getFILEPATH() {
+		return FILEPATH;
+	}
+
+
+	public void setFILEPATH(String fILEPATH1) {
+		this.FILEPATH = fILEPATH1;
+	}
+
+
+	//public static String FILEPATH="C:/Users/amankumar792/Downloads/spring-boot-file-upload-download-rest-api-example-master/";
     public static final String FILETYPE = ".xlsx";
-
-
 
 
     //********************** Job classification, job program, emp liability variables declaration *********************************//
@@ -35,9 +54,19 @@ public final class Constants {
 
     
     //******************************* For NCCI latest LCR rates ****************************************//
-    public static List<Integer> indexesForNCCIRates = Arrays.asList(model.getNcciColumnIndexes());
+    public static List<Integer> ncci(Model model){
+    	 //List<Integer> indexesForNCCIRates = Arrays.asList(model.getNcciColumnIndexes());
+    	 List<Integer> indexesForNCCIRates=null;
+    	 indexesForNCCIRates=Arrays.asList(model.getNcciColumnIndexes());
+		return indexesForNCCIRates;
+    }
+    
 
-   
+    //******************************************* Configuration for output excel ***********************************************//
+    /*public static String JOB_CLASSIFICATION = "Job Classification";                // Job classification output file name
+    public static String JOB_PROGRAM_CODES = "Job Program Codes";                  // Job program code output file name
+    public static String EMP_LIA_LIMITS = "Emp Lia Limits";                        // Emp lia limit output file name
+  */
        
 
     public static void initialize(boolean isClientSL, boolean isLatestRates){

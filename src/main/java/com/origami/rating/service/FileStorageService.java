@@ -1,6 +1,7 @@
 package com.origami.rating.service;
 
 
+import com.origami.rating.entity.Model;
 import com.origami.rating.exception.*;
 import com.origami.rating.property.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,12 @@ public class FileStorageService {
 
     private final Path fileStorageLocation;
     
+    @Autowired
+    public static Model model;
 
 	@Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
+		System.out.println(model);
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
 
