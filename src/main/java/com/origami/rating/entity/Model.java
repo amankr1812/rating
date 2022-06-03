@@ -217,6 +217,25 @@ public class Model {
 		this.setUseLatestRates(model.useLatestRates);
 		this.setFileNcciRates(model.fileNcciRates);
 		this.setNcciColumnIndexes(model.ncciColumnIndexes);
+		this.setFileProductDefinition(model.fileProductDefinition);
+		this.setStateWcRateLcSheetNo(model.stateWcRateLcSheetNo);
+		this.setRowReadIndexForWcSheet(model.rowReadIndexForWcSheet);
+		this.setStateClassVarSheetNo(model.stateClassVarSheetNo);
+		this.setRowReadIndexForClassVarSheet(model.rowReadIndexForClassVarSheet);
+		this.setStateEmpLiabilitySheetNo(model.stateEmpLiabilitySheetNo);
+		this.setRowReadIndexForEmpLiability(model.rowReadIndexForEmpLiability);
+		this.setIsClientSL(model.isClientSL);
+		this.setFileClassTable(model.fileClassTable);
+		this.setFilterWithClassTable(model.filterWithClassTable);
+		this.setStateQuickChartSheetNo(model.stateQuickChartSheetNo);
+		this.setRowReadIndexForClassCodes(model.rowReadIndexForClassCodes);
+		this.setJobClassification("Job Classification");
+		this.setJobProgramCodes("Job Program Codes");
+		this.setEmpLiaLimits("Emp Lia Limits");
+		this.setCarrier(model.carrier);
+		this.setLcm(model.lcm);
+		this.setRatingTier(model.ratingTier);
+		
 		
 		//this.productDefinition=model.productDefinition;
 		//this.classTable=model.classTable;
@@ -225,24 +244,24 @@ public class Model {
 //		this.useLatestRates = model.useLatestRates;
 //		this.fileNcciRates = model.fileNcciRates;
 //		this.ncciColumnIndexes = model.ncciColumnIndexes;
-		this.fileProductDefinition = model.fileProductDefinition;
-		this.stateWcRateLcSheetNo = model.stateWcRateLcSheetNo;
-		this.rowReadIndexForWcSheet = model.rowReadIndexForWcSheet;
-		this.stateClassVarSheetNo = model.stateClassVarSheetNo;
-		this.rowReadIndexForClassVarSheet = model.rowReadIndexForClassVarSheet;
-		this.stateEmpLiabilitySheetNo = model.stateEmpLiabilitySheetNo;
-		this.rowReadIndexForEmpLiability = model.rowReadIndexForEmpLiability;
-		this.isClientSL = model.isClientSL;
-		this.fileClassTable = model.fileClassTable;
-		this.filterWithClassTable = model.filterWithClassTable;
-		this.stateQuickChartSheetNo = model.stateQuickChartSheetNo;
-		this.rowReadIndexForClassCodes = model.rowReadIndexForClassCodes;
-		this.jobClassification = model.jobClassification;
-		this.jobProgramCodes = model.jobProgramCodes;
-		this.empLiaLimits = model.empLiaLimits;
-		this.carrier = model.carrier;
-		this.lcm = model.lcm;
-		this.ratingTier = model.ratingTier;
+//		this.fileProductDefinition = model.fileProductDefinition;
+//		this.stateWcRateLcSheetNo = model.stateWcRateLcSheetNo;
+//		this.rowReadIndexForWcSheet = model.rowReadIndexForWcSheet;
+//		this.stateClassVarSheetNo = model.stateClassVarSheetNo;
+//		this.rowReadIndexForClassVarSheet = model.rowReadIndexForClassVarSheet;
+//		this.stateEmpLiabilitySheetNo = model.stateEmpLiabilitySheetNo;
+//		this.rowReadIndexForEmpLiability = model.rowReadIndexForEmpLiability;
+//		this.isClientSL = model.isClientSL;
+//		this.fileClassTable = model.fileClassTable;
+//		this.filterWithClassTable = model.filterWithClassTable;
+//		this.stateQuickChartSheetNo = model.stateQuickChartSheetNo;
+//		this.rowReadIndexForClassCodes = model.rowReadIndexForClassCodes;
+//		this.jobClassification = model.jobClassification;
+//		this.jobProgramCodes = model.jobProgramCodes;
+//		this.empLiaLimits = model.empLiaLimits;
+//		this.carrier = model.carrier;
+//		this.lcm = model.lcm;
+//		this.ratingTier = model.ratingTier;
 	}
 	
 	public Model(MultipartFile productDefinition,MultipartFile classTable,MultipartFile ncciFile, String currentState, boolean useLatestRates, String fileNcciRates, String ncciColumnIndexes,
