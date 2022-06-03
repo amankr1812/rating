@@ -210,13 +210,21 @@ public class Model {
 	}
 	
 	public Model(Model model) {
-		this.productDefinition=model.productDefinition;
-		this.classTable=model.classTable;
-		this.ncciFile=model.ncciFile;
-		this.currentState = model.currentState;
-		this.useLatestRates = model.useLatestRates;
-		this.fileNcciRates = model.fileNcciRates;
-		this.ncciColumnIndexes = model.ncciColumnIndexes;
+		this.setProductDefinition(model.productDefinition);
+		this.setClassTable(model.classTable);
+		this.setNcciFile(model.ncciFile);
+		this.setCurrentState(model.currentState);
+		this.setUseLatestRates(model.useLatestRates);
+		this.setFileNcciRates(model.fileNcciRates);
+		this.setNcciColumnIndexes(model.ncciColumnIndexes);
+		
+		//this.productDefinition=model.productDefinition;
+		//this.classTable=model.classTable;
+//		this.ncciFile=model.ncciFile;
+//		this.currentState = model.currentState;
+//		this.useLatestRates = model.useLatestRates;
+//		this.fileNcciRates = model.fileNcciRates;
+//		this.ncciColumnIndexes = model.ncciColumnIndexes;
 		this.fileProductDefinition = model.fileProductDefinition;
 		this.stateWcRateLcSheetNo = model.stateWcRateLcSheetNo;
 		this.rowReadIndexForWcSheet = model.rowReadIndexForWcSheet;
